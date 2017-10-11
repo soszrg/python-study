@@ -1,15 +1,25 @@
 # -*- encoding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
+import json
+import random
 import time
 from threading import Thread
 
 import paho.mqtt.client as mqtt
 
-username = '44a9c0e21b4211e7a554fa163e876164/d3ffeca4259611e7a554fa163e876164'
-password = '8DMayouGrZNK68s2DWypIc/GEnA9vpEiy8wvJobjvGE='
-topic = '44a9c0e21b4211e7a554fa163e876164/0f72d67e1b7511e7a554fa163e876164/d3ffeca4259611e7a554fa163e876164/status/json'
-clientid = 'd3ffeca4259611e7a554fa163e876164'
-host = '44a9c0e21b4211e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
+# username = '81579cea3a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164'
+# password = '5BNr3VgYOCznK0hFcFJogDD7HLJs1pilXrv2s6CV9Js='
+# topic = '81579cea3a1811e7a554fa163e876164/9c0fa1043a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164/status/json'
+# clientid = '83e134fa42bd11e7a554fa163e876164'
+# host = '81579cea3a1811e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
+# port = 1883
+
+username = '81579cea3a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164'
+password = '5BNr3VgYOCznK0hFcFJogDD7HLJs1pilXrv2s6CV9Js='
+topic = '81579cea3a1811e7a554fa163e876164/9c0fa1043a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164/status/json'
+clientid = '83e134fa42bd11e7a554fa163e876164'
+host = '81579cea3a1811e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
 port = 1883
 
 
@@ -26,7 +36,7 @@ class MqttManager(object):
 
     def connect(self):
         print "Try to connect server..."
-        self.client.connect(host, port)
+        print self.client.connect(host, port)
         self.client.loop_start()
         while not self.is_connected:
             print "Wait connect done..."
@@ -69,27 +79,30 @@ class MqttManager(object):
     def _on_publisher(self, client, userdata, mid):
         print(u"[INFO] 发布成功:%s" % mid)
 
-
 try:
     mqtt_client = MqttManager(username, password, clientid)
     mqtt_client.connect()
-    mqtt_client.subscribe(topic)
 
-    i = 0
     while True:
-        mqtt_client.publisher(topic, "test%s" % i)
-        i += 1
-        # if i == 10:
-        #     mqtt_client.disconnect()
-        time.sleep(1)
-    # if mqtt_client.is_connected:
-    #     mqtt_client.disconnect()
-    #     while mqtt_client.is_connected:
-    #         print "Wait disconnect done..."
-    #         time.sleep(1)
-    #     print "===disconnect==="
-    while True:
-        time.sleep(1)
+        rand_num = random.randint(0, 50)
+        payload = {
+            "DeviceMode": 1,
+            "PM2_5": rand_num,
+            "PM2_5Avg": 12,
+            "CO2": 0,
+            "Temperature": 0,
+            "Humidity": 0,
+            "Pressure": 12,
+            "SensorStamp": 99,
+            "MotorRPM": 99,
+            "FilterSta": 99,
+            "OperHours": 99,
+            "ErrorCode": 1,
+            "MsgType": 5
+        }
+        # print json.dumps(payload) % (random.randint(1, 10))
+        mqtt_client.publisher(topic, json.dumps(payload))
+        time.sleep(5)
 except Exception, e:
     print u"错误:{0} ".format(str(e))
 
