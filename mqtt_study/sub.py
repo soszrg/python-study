@@ -15,17 +15,26 @@ import paho.mqtt.client as mqtt
 # host = '81579cea3a1811e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
 # port = 1883
 
-username = '81579cea3a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164'
-password = '5BNr3VgYOCznK0hFcFJogDD7HLJs1pilXrv2s6CV9Js='
-topic = '81579cea3a1811e7a554fa163e876164/9c0fa1043a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164/status/json'
-clientid = '83e134fa42bd11e7a554fa163e876164'
-host = '81579cea3a1811e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
-port = 1883
+username = 'ebf99816-ce8b-11e7-86c3-00163e105361'
+password = '123456'
+topic = 'd2c/ebf99816-ce8b-11e7-86c3-00163e105361/status'
+clientid = 'ebf99816-ce8b-11e7-86c3-00163e105361'
+host = 'v2test.fogcloud.io'
+port = 18832
+
+# username = '81579cea3a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164'
+# password = '5BNr3VgYOCznK0hFcFJogDD7HLJs1pilXrv2s6CV9Js='
+# topic = '81579cea3a1811e7a554fa163e876164/9c0fa1043a1811e7a554fa163e876164/83e134fa42bd11e7a554fa163e876164/status/json'
+# clientid = '83e134fa42bd11e7a554fa163e876164'
+# host = '81579cea3a1811e7a554fa163e876164.mqtt.iot.gz.baidubce.com'
+# port = 1883
+#
 
 
 class MqttManager(object):
     def __init__(self, username, password, clientid):
         self.is_connected = False
+        self.is_loop = False
         self.client = mqtt.Client(clientid)
         self.client.username_pw_set(username, password)
         self.client.on_connect = self._on_connect
@@ -36,11 +45,19 @@ class MqttManager(object):
 
     def connect(self):
         print "Try to connect server..."
-        print self.client.connect(host, port)
+        # print "connect return code: %d" % self.client.connect(host, port)
+        # print "Wait connect done..."
+        self.is_loop = True
         self.client.loop_start()
         while not self.is_connected:
+            try:
+                print "connect return code: %d" % self.client.connect(host, port)
+                if self.client._thread:
+                    self.client.loop_start()
+            except Exception as e:
+                print "connect error: %s" % e.strerror
             print "Wait connect done..."
-            time.sleep(1)
+            time.sleep(5)
         print "Connect Done"
 
     def disconnect(self):
@@ -65,6 +82,7 @@ class MqttManager(object):
     def _on_disconnect(self, client, userdata, rc):
         self.is_connected = False
         # self.client.loop_stop()
+        self.connect()
         print(u"[INFO] 断开MQTT服务器:返回码 " + str(rc))
 
     # 接受发布消息.
@@ -79,30 +97,38 @@ class MqttManager(object):
     def _on_publisher(self, client, userdata, mid):
         print(u"[INFO] 发布成功:%s" % mid)
 
+
 try:
     mqtt_client = MqttManager(username, password, clientid)
     mqtt_client.connect()
 
-    while True:
-        rand_num = random.randint(0, 50)
-        payload = {
-            "DeviceMode": 1,
-            "PM2_5": rand_num,
-            "PM2_5Avg": 12,
-            "CO2": 0,
-            "Temperature": 0,
-            "Humidity": 0,
-            "Pressure": 12,
-            "SensorStamp": 99,
-            "MotorRPM": 99,
-            "FilterSta": 99,
-            "OperHours": 99,
-            "ErrorCode": 1,
-            "MsgType": 5
-        }
-        # print json.dumps(payload) % (random.randint(1, 10))
-        mqtt_client.publisher(topic, json.dumps(payload))
-        time.sleep(5)
+    # while True:
+    #     rand_num = random.randint(0, 50)
+    #     payload = {
+    #         "DeviceMode": 1,
+    #         "PM2_5": rand_num,
+    #         "PM2_5Avg": 12,
+    #         "CO2": 0,
+    #         "Temperature": 0,
+    #         "Humidity": 0,
+    #         "Pressure": 12,
+    #         "SensorStamp": 99,
+    #         "MotorRPM": 99,
+    #         "FilterSta": 99,
+    #         "OperHours": 99,
+    #         "ErrorCode": 1,
+    #         "MsgType": 5
+    #     }
+    #     # print json.dumps(payload) % (random.randint(1, 10))
+    #     mqtt_client.publisher(topic, json.dumps(payload))
+    #     time.sleep(5)
+    try:
+        mqtt_client.client.loop_forever()
+    except Exception:
+        mqtt_client.connect()
+    # while True:
+    #     print "===>sleep 3 secs"
+    #     time.sleep(3)
 except Exception, e:
     print u"错误:{0} ".format(str(e))
 
