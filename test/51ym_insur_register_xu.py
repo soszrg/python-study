@@ -14,7 +14,9 @@ account_count = 0
 du = 1471
 cui = 1199
 wo = 1323
-invite_id = wo
+wu = 79912
+xu = 223160
+invite_id = xu
 errors = 0
 
 while True:
@@ -77,14 +79,10 @@ while True:
             errors += 1
             print "register error"
         print "===> has registered %d users" % account_count
-        if account_count < 100:
-            rand_number = random.randint(1, 3)
-        elif account_count < 200:
-            rand_number = random.randint(10, 60)
-        else:
-            rand_number = random.randint(60, 600)
-        print "[%s]===> will wait for %d minutes to another register" % (datetime.datetime.now(), rand_number)
-        time.sleep(60 * rand_number)
+        random_int = random.randint(1, 10)
+        print "[%s]===> will wait for %d seconds to another register" % (datetime.datetime.now(), random_int)
+
+        time.sleep(5)
     except Exception as e:
         print e.message
         continue

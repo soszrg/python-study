@@ -14,7 +14,7 @@ account_count = 0
 du = 1471
 cui = 1199
 wo = 1323
-invite_id = wo
+invite_id = du
 errors = 0
 
 while True:

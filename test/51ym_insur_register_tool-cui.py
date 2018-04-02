@@ -14,7 +14,7 @@ account_count = 0
 du = 1471
 cui = 1199
 wo = 1323
-invite_id = wo
+invite_id = cui
 errors = 0
 
 while True:
@@ -83,7 +83,7 @@ while True:
             rand_number = random.randint(10, 60)
         else:
             rand_number = random.randint(60, 600)
-        print "[%s]===> will wait for %d minutes to another register" % (datetime.datetime.now(), rand_number)
+        print "%s===> will wait for %d minutes to another register" % (datetime.datetime.now(), rand_number)
         time.sleep(60 * rand_number)
     except Exception as e:
         print e.message
