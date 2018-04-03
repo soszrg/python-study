@@ -1,10 +1,9 @@
 # -*- encoding: utf-8 -*-
-from __future__ import unicode_literals, absolute_import
-
+from __future__ import unicode_literals
 import itchat
 from itchat.content import *
 
-from weixin.stock_robot.stock_data_query import request_sh
+from stock_data_query import request_sh
 
 itchat.auto_login(hotReload=True)
 
