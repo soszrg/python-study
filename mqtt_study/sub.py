@@ -122,10 +122,10 @@ try:
     #     # print json.dumps(payload) % (random.randint(1, 10))
     #     mqtt_client.publisher(topic, json.dumps(payload))
     #     time.sleep(5)
-    try:
-        mqtt_client.client.loop_forever()
-    except Exception:
-        mqtt_client.connect()
+    # try:
+    #     mqtt_client.client.loop_forever()
+    # except Exception:
+    #     mqtt_client.connect()
     # while True:
     #     print "===>sleep 3 secs"
     #     time.sleep(3)
