@@ -2,7 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 from multiprocessing import Pool as ProcessPool, freeze_support, Process, current_process
 from multiprocessing.dummy import Pool as ThreadPool
-import Queue
 import time
 
 
@@ -11,22 +10,24 @@ def wrapper(func):
         start = time.time()
         func(*arg, **kwargs)
         end = time.time()
-        print "Take {}\n".format(str(end-start))
+        print("Take {}\n".format(str(end - start)))
 
     return inter
 
+
 # @wrapper
 def func(x):
-    print current_process().pid
+    print(current_process().pid)
     for _ in range(10000000):
         x += 1
-    print "4: %d" % x
+    print("4: %d" % x)
     # time.sleep(3)
     return x
 
 
 def callback(x):
-    print "3: %d" % x
+    print("3: %d" % x)
+
 
 if __name__ == '__main__':
     freeze_support()
@@ -49,5 +50,4 @@ if __name__ == '__main__':
     # tp.map_async(func, [1000, 3])
     # tp.close()
     # tp.join()
-    print "main exit:%s" % (time.time() - start)
-
+    print("main exit:%s" % (time.time() - start))

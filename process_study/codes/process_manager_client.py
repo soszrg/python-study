@@ -17,6 +17,4 @@ mgr = RemoteManager(address=(host, port), authkey=secret)
 mgr.connect()
 
 l = mgr.zrg_test()
-print l
 l.append(1)
-print mgr.zrg_test()

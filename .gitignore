@@ -68,3 +68,4 @@ mailhog
 
 setenv.sh
 env.sh
+.venv
