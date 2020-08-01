@@ -2,7 +2,7 @@
 from __future__ import absolute_import, unicode_literals
 import json
 import urllib
-from urllib import urlencode
+from urllib.parse import urlencode
 
 App_key = "50d53e7b519f6b5ca65ca214b1e8948a"
 
@@ -39,7 +39,7 @@ def request_sh(gid, app_key=App_key, m="GET"):
         error_code = res["error_code"]
         if error_code == 0:
             # 成功请求
-            print res["result"][0]
+            print(res["result"][0])
             data = "\n股票名称:" + res["result"][0]["data"]['name'] + "\n" +\
                 "股票编号:" + res["result"][0]["data"]['gid'] + "\n" + \
                 "当前价格:" + res["result"][0]["data"]['nowPri'] + "\n" + \
@@ -55,9 +55,9 @@ def request_sh(gid, app_key=App_key, m="GET"):
 
             return data
         else:
-            print "%s:%s" % (res["error_code"], res["reason"])
+            print("%s:%s" % (res["error_code"], res["reason"]))
     else:
-        print "request api error"
+        print("request api error")
 
     return None
 
